@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <property name="SERVICE_NAME" value="sugarfit-service-template"/>
+
+    <!-- ═══ DEV / DEFAULT PROFILE: Human-readable console ═══ -->
+    <springProfile name="dev,default">
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>
+                    %d{HH:mm:ss.SSS} %highlight(%-5level) [%thread] [rid:%X{requestId:-—}] %cyan(%logger{36}) — %msg%n
+                </pattern>
+            </encoder>
+        </appender>
+
+        <logger name="com.sugarfit" level="DEBUG"/>
+
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <!-- ═══ PROD PROFILE: Structured JSON for log aggregation ═══ -->
+    <springProfile name="prod">
+        <appender name="JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+                <customFields>{"service":"${SERVICE_NAME}"}</customFields>
+                <fieldNames>
+                    <timestamp>timestamp</timestamp>
+                    <version>[ignore]</version>
+                </fieldNames>
+                <!-- Only include relevant MDC keys -->
+                <includeMdcKeyName>requestId</includeMdcKeyName>
+                <includeMdcKeyName>userId</includeMdcKeyName>
+                <includeMdcKeyName>traceId</includeMdcKeyName>
+                <includeMdcKeyName>spanId</includeMdcKeyName>
+            </encoder>
+        </appender>
+
+        <!-- Suppress noisy framework loggers -->
+        <logger name="org.apache.catalina" level="WARN"/>
+        <logger name="org.apache.tomcat" level="WARN"/>
+        <logger name="org.hibernate" level="WARN"/>
+        <logger name="org.springframework.web.servlet" level="WARN"/>
+        <logger name="com.sugarfit" level="INFO"/>
+
+        <root level="WARN">
+            <appender-ref ref="JSON_CONSOLE"/>
+        </root>
+    </springProfile>
+
+</configuration>
