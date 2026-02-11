@@ -43,6 +43,11 @@ mvnw.cmd test
 
 ### Build and Run as JAR
 
+**Before building for production**, update the allowed CORS origins in `src/main/resources/application-prod.properties`:
+```properties
+cors.allowed-origins=https://your-domain.com
+```
+
 ```bash
 # Linux / macOS
 ./mvnw clean package
