@@ -21,16 +21,6 @@ mvnw.cmd spring-boot:run
 
 The service starts on `http://localhost:8080` with the `dev` profile by default.
 
-### Run with Production Profile
-
-```bash
-# Linux / macOS
-./mvnw spring-boot:run -Dspring-boot.run.profiles=prod
-
-# Windows
-mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=prod
-```
-
 ### Run Tests
 
 ```bash
